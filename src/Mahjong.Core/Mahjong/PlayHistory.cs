@@ -13,8 +13,6 @@ namespace Mahjong.Mahjong
 
         public int Round { get; set; }
 
-        public Guid PlayingKey { get; set; }
-
         public virtual DateTime CreationTime { get; set; }
 
         public PlayHistory()

@@ -9,8 +9,13 @@ using Mahjong.Mahjong;
 namespace Mahjong.Cards.Dto
 {
     [AutoMapFrom(typeof(Card))]
-    public class CardDto : EntityDto<int>
+    public class CardDto : EntityDto<string>
     {
-       
+        [MaxLength(500)]
+        public string Description { get; set; }
+
+        [MaxLength(50)]
+        public string CardType { get; set; }
+
     }
 }

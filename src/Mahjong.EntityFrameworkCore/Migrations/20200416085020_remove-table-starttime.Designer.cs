@@ -4,14 +4,16 @@ using Mahjong.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Mahjong.Migrations
 {
     [DbContext(typeof(MahjongDbContext))]
-    partial class MahjongDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200416085020_remove-table-starttime")]
+    partial class removetablestarttime
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

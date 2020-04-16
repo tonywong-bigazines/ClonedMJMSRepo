@@ -12,12 +12,10 @@ namespace Mahjong.Mahjong
 
         public string Position { get; set; }
 
-        public string TableCardId { get; set; }
-        public Card TableCard { get; set; }
-
         public string PlayerCardId { get; set; }
         public Card PlayerCard { get; set; }
 
-        public string PlayerType { get; set; }
+
+
     }
 }

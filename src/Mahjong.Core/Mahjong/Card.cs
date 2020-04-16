@@ -14,7 +14,7 @@ namespace Mahjong.Mahjong
         [MaxLength(50)]
         public string CardType { get; set; }
 
-        public int? TableId { get; set; }
-        public Table Table { get; set; }
+
+        public decimal Commission { get; set; }
     }
 }

@@ -4,14 +4,16 @@ using Mahjong.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Mahjong.Migrations
 {
     [DbContext(typeof(MahjongDbContext))]
-    partial class MahjongDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200416084547_update-tabels2004160445")]
+    partial class updatetabels2004160445
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1679,6 +1681,9 @@ namespace Mahjong.Migrations
 
                     b.Property<int>("Round")
                         .HasColumnType("int");
+
+                    b.Property<DateTime?>("StartTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Status")
                         .HasColumnType("nvarchar(50)")

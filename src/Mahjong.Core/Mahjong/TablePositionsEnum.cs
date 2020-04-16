@@ -10,5 +10,7 @@ namespace Mahjong.Mahjong
         public static readonly string South = "South";
         public static readonly string West = "West";
         public static readonly string North = "North";
+
+        public static readonly string[] All = new string[] { East, South, West, North };
     }
 }

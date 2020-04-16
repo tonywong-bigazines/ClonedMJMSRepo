@@ -4,14 +4,16 @@ using Mahjong.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Mahjong.Migrations
 {
     [DbContext(typeof(MahjongDbContext))]
-    partial class MahjongDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200416043210_update-cards")]
+    partial class updatecards
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1523,9 +1525,6 @@ namespace Mahjong.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<decimal>("Commission")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2");
 
@@ -1566,6 +1565,9 @@ namespace Mahjong.Migrations
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid>("PlayingKey")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("Round")
                         .HasColumnType("int");
 
@@ -1586,8 +1588,29 @@ namespace Mahjong.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("Amount")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Loser1CardId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Loser1PlayerType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Loser2CardId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Loser2PlayerType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Loser3CardId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Loser3PlayerType")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("MohjongActionName")
                         .HasColumnType("nvarchar(max)");
@@ -1595,44 +1618,41 @@ namespace Mahjong.Migrations
                     b.Property<string>("StaffCardId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("Winner1CardId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Winner1PlayerType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Winner2CardId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Winner2PlayerType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Winner3CardId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Winner3PlayerType")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("Loser1CardId");
+
+                    b.HasIndex("Loser2CardId");
+
+                    b.HasIndex("Loser3CardId");
+
                     b.HasIndex("StaffCardId");
+
+                    b.HasIndex("Winner1CardId");
+
+                    b.HasIndex("Winner2CardId");
+
+                    b.HasIndex("Winner3CardId");
 
                     b.ToTable("PlayHistoryDetails");
-                });
-
-            modelBuilder.Entity("Mahjong.Mahjong.PlayHistoryDetailPlayer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("PlayHistoryDetailId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("PlayerCardId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("PlayerType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StaffCardId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("WinOrLose")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PlayHistoryDetailId");
-
-                    b.HasIndex("PlayerCardId");
-
-                    b.HasIndex("StaffCardId");
-
-                    b.ToTable("PlayHistoryDetailPlayers");
                 });
 
             modelBuilder.Entity("Mahjong.Mahjong.Table", b =>
@@ -1641,6 +1661,9 @@ namespace Mahjong.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("Amount")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2");
@@ -1667,18 +1690,15 @@ namespace Mahjong.Migrations
                     b.Property<long?>("LastModifierUserId")
                         .HasColumnType("bigint");
 
-                    b.Property<decimal>("MaxAmount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("MinAmount")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<int>("Round")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("PlayingKey")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("StartTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Status")
                         .HasColumnType("nvarchar(50)")
@@ -1699,8 +1719,14 @@ namespace Mahjong.Migrations
                     b.Property<string>("PlayerCardId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("PlayerType")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Position")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TableCardId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("TableId")
                         .HasColumnType("int");
@@ -1708,6 +1734,8 @@ namespace Mahjong.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("PlayerCardId");
+
+                    b.HasIndex("TableCardId");
 
                     b.HasIndex("TableId");
 
@@ -1984,26 +2012,33 @@ namespace Mahjong.Migrations
 
             modelBuilder.Entity("Mahjong.Mahjong.PlayHistoryDetail", b =>
                 {
-                    b.HasOne("Mahjong.Mahjong.Card", "StaffCard")
+                    b.HasOne("Mahjong.Mahjong.Card", "Loser1Card")
                         .WithMany()
-                        .HasForeignKey("StaffCardId");
-                });
+                        .HasForeignKey("Loser1CardId");
 
-            modelBuilder.Entity("Mahjong.Mahjong.PlayHistoryDetailPlayer", b =>
-                {
-                    b.HasOne("Mahjong.Mahjong.PlayHistoryDetail", "PlayHistoryDetail")
-                        .WithMany("Players")
-                        .HasForeignKey("PlayHistoryDetailId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Mahjong.Mahjong.Card", "PlayerCard")
+                    b.HasOne("Mahjong.Mahjong.Card", "Loser2Card")
                         .WithMany()
-                        .HasForeignKey("PlayerCardId");
+                        .HasForeignKey("Loser2CardId");
+
+                    b.HasOne("Mahjong.Mahjong.Card", "Loser3Card")
+                        .WithMany()
+                        .HasForeignKey("Loser3CardId");
 
                     b.HasOne("Mahjong.Mahjong.Card", "StaffCard")
                         .WithMany()
                         .HasForeignKey("StaffCardId");
+
+                    b.HasOne("Mahjong.Mahjong.Card", "Winner1Card")
+                        .WithMany()
+                        .HasForeignKey("Winner1CardId");
+
+                    b.HasOne("Mahjong.Mahjong.Card", "Winner2Card")
+                        .WithMany()
+                        .HasForeignKey("Winner2CardId");
+
+                    b.HasOne("Mahjong.Mahjong.Card", "Winner3Card")
+                        .WithMany()
+                        .HasForeignKey("Winner3CardId");
                 });
 
             modelBuilder.Entity("Mahjong.Mahjong.TableSeat", b =>
@@ -2012,8 +2047,12 @@ namespace Mahjong.Migrations
                         .WithMany()
                         .HasForeignKey("PlayerCardId");
 
+                    b.HasOne("Mahjong.Mahjong.Card", "TableCard")
+                        .WithMany()
+                        .HasForeignKey("TableCardId");
+
                     b.HasOne("Mahjong.Mahjong.Table", "Table")
-                        .WithMany("Seats")
+                        .WithMany()
                         .HasForeignKey("TableId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

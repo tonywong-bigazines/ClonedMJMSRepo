@@ -11,6 +11,14 @@ namespace Mahjong.TableSeats.Dto
     [AutoMapTo(typeof(TableSeat))]
     public class CreateTableSeatDto
     {
-        
+        public int TableId { get; set; }
+
+        public string Position { get; set; }
+
+        public string TableCardId { get; set; }
+
+        public string PlayerCardId { get; set; }
+
+        public string PlayerType { get; set; }
     }
 }

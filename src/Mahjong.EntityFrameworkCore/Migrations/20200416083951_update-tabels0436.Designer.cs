@@ -4,14 +4,16 @@ using Mahjong.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Mahjong.Migrations
 {
     [DbContext(typeof(MahjongDbContext))]
-    partial class MahjongDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200416083951_update-tabels0436")]
+    partial class updatetabels0436
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1680,6 +1682,9 @@ namespace Mahjong.Migrations
                     b.Property<int>("Round")
                         .HasColumnType("int");
 
+                    b.Property<DateTime?>("StartTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Status")
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
@@ -1696,18 +1701,18 @@ namespace Mahjong.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("PlayerCardId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("Position")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TableCardId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("TableId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PlayerCardId");
+                    b.HasIndex("TableCardId");
 
                     b.HasIndex("TableId");
 
@@ -2008,9 +2013,9 @@ namespace Mahjong.Migrations
 
             modelBuilder.Entity("Mahjong.Mahjong.TableSeat", b =>
                 {
-                    b.HasOne("Mahjong.Mahjong.Card", "PlayerCard")
+                    b.HasOne("Mahjong.Mahjong.Card", "TableCard")
                         .WithMany()
-                        .HasForeignKey("PlayerCardId");
+                        .HasForeignKey("TableCardId");
 
                     b.HasOne("Mahjong.Mahjong.Table", "Table")
                         .WithMany("Seats")

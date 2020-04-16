@@ -17,12 +17,16 @@ namespace Mahjong.Mahjong
         [MaxLength(50)]
         public string Status { get; set; }
 
-        public DateTime? StartTime { get; set; }
+        public decimal MinAmount { get; set; }
+        public decimal MaxAmount { get; set; }
 
-        public int? Amount { get; set; }
+        public int Round { get; set; }
 
-        public virtual List<Card> Cards { get; set; }
+        public virtual List<TableSeat> Seats { get; set; }
 
-        public Guid? PlayingKey { get; set; }
+        public Table()
+        {
+            Seats = new List<TableSeat>();
+        }
     }
 }
