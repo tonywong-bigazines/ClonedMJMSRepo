@@ -4,14 +4,16 @@ using Mahjong.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Mahjong.Migrations
 {
     [DbContext(typeof(MahjongDbContext))]
-    partial class MahjongDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200420075746_update-PlayHistory")]
+    partial class updatePlayHistory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1598,14 +1600,9 @@ namespace Mahjong.Migrations
                     b.Property<string>("OperatorCardId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("PlayHistoryId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("OperatorCardId");
-
-                    b.HasIndex("PlayHistoryId");
 
                     b.ToTable("PlayHistoryDetails");
                 });
@@ -1624,9 +1621,6 @@ namespace Mahjong.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("PlayerType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Position")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("StaffCardId")
@@ -1998,12 +1992,6 @@ namespace Mahjong.Migrations
                     b.HasOne("Mahjong.Mahjong.Card", "OperatorCard")
                         .WithMany()
                         .HasForeignKey("OperatorCardId");
-
-                    b.HasOne("Mahjong.Mahjong.PlayHistory", "PlayHistory")
-                        .WithMany("PlayHistoryDetails")
-                        .HasForeignKey("PlayHistoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Mahjong.Mahjong.PlayHistoryDetailPlayer", b =>

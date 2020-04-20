@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Mahjong.Web.Mvc</name>
+    </assembly>
+    <members>
+        <member name="M:Mahjong.Web.Controllers.AccountController.TestNotification(System.String)">
+            <summary>
+            This is a demo code to demonstrate sending notification to default tenant admin and host admin uers.
+            Don't use this code in production !!!
+            </summary>
+            <param name="message"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Mahjong.Web.Startup.MahjongNavigationProvider">
+            <summary>
+            This class defines menus for the application.
+            </summary>
+        </member>
+    </members>
+</doc>

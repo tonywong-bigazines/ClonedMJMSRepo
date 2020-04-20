@@ -45,25 +45,32 @@ namespace Mahjong.Tables
             return MapToEntityDto(entity); ;
         }
 
+        /// <summary>
+        /// 入座
+        /// </summary>
+        /// <param name="tableId"></param>
+        /// <param name="position"></param>
+        /// <param name="playerCardId"></param>
         [HttpGet]
-        public void TakeSeat(int tableId, string position, string playerCardId)
+        public void CheckIn(int tableId, string position, string playerCardId)
         {
             _cardAppService.CardTypeVerification(playerCardId, CardTypes.Client, CardTypes.Staff, CardTypes.FakeClient);
 
-            OffSeatByPlayerCardId(playerCardId);
+            CheckOutByPlayerCardId(playerCardId);
 
             var seat = _tableSeatRepository.GetAll().FirstOrDefault(x => x.TableId == tableId && x.Position == position);
-            var hasBeenTaked = seat != null && seat.PlayerCardId != null;
-            if (hasBeenTaked)
-            {
-                throw new UserFriendlyException("This seat is already occupied.");
-            }
+
             seat.PlayerCardId = playerCardId;
             CurrentUnitOfWork.SaveChanges();
         }
 
+        /// <summary>
+        /// 離座 / 退出
+        /// </summary>
+        /// <param name="tableId"></param>
+        /// <param name="position"></param>
         [HttpGet]
-        public void OffSeat(int tableId, string position)
+        public void CheckOut(int tableId, string position)
         {
             var seat = _tableSeatRepository.GetAll().FirstOrDefault(x => x.TableId == tableId && x.Position == position);
             if (seat != null)
@@ -73,7 +80,7 @@ namespace Mahjong.Tables
             }
         }
 
-        private void OffSeatByPlayerCardId(string playerCardId)
+        private void CheckOutByPlayerCardId(string playerCardId)
         {
             var seat = _tableSeatRepository.GetAll().FirstOrDefault(x => x.PlayerCardId == playerCardId);
             if (seat != null)

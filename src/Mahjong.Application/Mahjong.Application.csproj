@@ -12,5 +12,6 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mahjong.Core\Mahjong.Core.csproj" />
+    <ProjectReference Include="..\Mahjong.EntityFrameworkCore\Mahjong.EntityFrameworkCore.csproj" />
   </ItemGroup>
 </Project>

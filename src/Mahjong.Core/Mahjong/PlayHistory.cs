@@ -13,11 +13,16 @@ namespace Mahjong.Mahjong
 
         public int Round { get; set; }
 
+        public bool IsPlaying { get; set; }
+
         public virtual DateTime CreationTime { get; set; }
+
+        public virtual List<PlayHistoryDetail> PlayHistoryDetails { get; set; }
 
         public PlayHistory()
         {
             CreationTime = DateTime.Now;
+            IsPlaying = true;
         }
 
     }
