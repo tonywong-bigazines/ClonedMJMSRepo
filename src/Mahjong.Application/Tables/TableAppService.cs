@@ -1,6 +1,7 @@
 ﻿using Abp.Application.Services;
 using Abp.Authorization;
 using Abp.Domain.Repositories;
+using Abp.Domain.Uow;
 using Abp.UI;
 using Mahjong.Cards;
 using Mahjong.Mahjong;
@@ -76,6 +77,18 @@ namespace Mahjong.Tables
             if (seat != null)
             {
                 seat.PlayerCardId = null;
+                CurrentUnitOfWork.SaveChanges();
+            }
+        }
+
+        [UnitOfWork]
+        [RemoteService(false)]
+        public virtual void RegisterDevice(int tableId, string position,string connectionId)
+        {
+            var seat = _tableSeatRepository.GetAll().FirstOrDefault(x => x.TableId == tableId && x.Position == position);
+            if (seat != null)
+            {
+                seat.DeviceConnectionId = connectionId;
                 CurrentUnitOfWork.SaveChanges();
             }
         }

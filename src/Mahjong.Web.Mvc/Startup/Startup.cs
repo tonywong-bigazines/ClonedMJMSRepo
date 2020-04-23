@@ -24,6 +24,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Collections.Generic;
+using Mahjong.SignalRService;
 
 namespace Mahjong.Web.Startup
 {
@@ -68,6 +69,13 @@ namespace Mahjong.Web.Startup
                 options.DocInclusionPredicate((docName, description) => true);
             });
 
+            services.AddCors(options => options.AddPolicy("CorsPolicy",
+            builder =>
+            {
+                builder.AllowAnyOrigin()
+                .AllowAnyMethod()
+                        .AllowAnyHeader();
+            }));
 
 
             // Configure Abp and Dependency Injection
@@ -109,11 +117,11 @@ namespace Mahjong.Web.Startup
 
             app.UseAuthorization();
 
-            
+            app.UseCors("CorsPolicy");
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapHub<AbpCommonHub>("/signalr");
+                endpoints.MapHub<RecordHub>("/signalr");
                 endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapControllerRoute("defaultWithArea", "{area}/{controller=Home}/{action=Index}/{id?}");
             });

@@ -16,6 +16,8 @@ using Abp.ObjectMapping;
 using Mahjong.EntityFrameworkCore;
 using Abp.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.SignalR;
+using Mahjong.SignalRService;
 
 namespace Mahjong.Actions
 {
@@ -23,25 +25,32 @@ namespace Mahjong.Actions
     {
         private readonly IObjectMapper _objectMapper;
         private readonly IRepository<Table> _tableRepository;
+        private readonly IRepository<TableSeat> _tableSeatRepository;
         private readonly IRepository<Card,string> _cardRepository;
         private readonly IRepository<PlayHistory> _playHistoryRepository;
         private readonly IRepository<PlayHistoryDetail> _playHistoryDetailRepository;
         private MahjongDbContext _dbContext => _dbContextProvider.GetDbContext();
         private readonly IDbContextProvider<MahjongDbContext> _dbContextProvider;
+        private readonly IHubContext<RecordHub> _hubContext;
+
 
         public ActionAppService(IObjectMapper objectMapper,
-            IRepository<Table> tableRepository, 
+            IRepository<Table> tableRepository,
+            IRepository<TableSeat> tableSeatRepository,
             IRepository<Card,string> cardRepository,
             IRepository<PlayHistory> playHistoryRepository,
             IRepository<PlayHistoryDetail> playHistoryDetailRepository,
-            IDbContextProvider<MahjongDbContext> dbContextProvider)
+            IDbContextProvider<MahjongDbContext> dbContextProvider,
+            IHubContext<RecordHub> hubContext)
         {
             _objectMapper = objectMapper;
             _tableRepository = tableRepository;
+            _tableSeatRepository = tableSeatRepository;
             _cardRepository = cardRepository;
             _playHistoryRepository = playHistoryRepository;
             _playHistoryDetailRepository = playHistoryDetailRepository;
             _dbContextProvider = dbContextProvider;
+            _hubContext = hubContext;
         }
 
         public void Create(CreateActionDto input)
@@ -100,12 +109,24 @@ namespace Mahjong.Actions
             _playHistoryDetailRepository.Insert(newPlayHistoryDetail);
 
             //結束當前回合的標誌Action
-            if (ActionsEnum.EndRoundActions.Contains(input.MahjongActionName))
+            if (ActionsEnum.RoundEndActions.Contains(input.MahjongActionName))
             {
                 table.Round += 1;
             }
+            
+            var actionDto = _objectMapper.Map<PlayHistoryDetailDto>(newPlayHistoryDetail);
+            PushNewRecord(table.Id, actionDto);
         }
 
+        private async void PushNewRecord(int tableId, PlayHistoryDetailDto action)
+        {
+            var seats = _tableSeatRepository.GetAll().Where(x => x.TableId == tableId).ToList();
+            if (seats != null)
+            {
+                var connections = seats.Select(x => x.DeviceConnectionId).ToList();
+                await _hubContext.Clients.Clients(connections).SendAsync("newRecord", action);
+            }            
+        }
 
         public List<PlayHistoryDto> GetPlayHistories(int tableId, string position)
         {

@@ -12,6 +12,8 @@ namespace Mahjong.Mahjong
 
         public string Position { get; set; }
 
+        public string DeviceConnectionId { get; set; }
+
         public string PlayerCardId { get; set; }
         public Card PlayerCard { get; set; }
 

@@ -17,6 +17,6 @@ namespace Mahjong.Mahjong
         public static readonly string 摸和 = "摸和";
 
         public static readonly string[] All = new string[] { 出明槓, 自明槓, 暗槓, 打出, 齋摸, 碼糊, 炸糊, 搶槓, 摸和 };
-        public static readonly string[] EndRoundActions = new string[] { 打出, 齋摸, 碼糊, 炸糊, 搶槓, 摸和 };
+        public static readonly string[] RoundEndActions = new string[] { 打出, 齋摸, 碼糊, 炸糊, 搶槓, 摸和 };
     }                                                                                            
 }                                                                                                
