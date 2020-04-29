@@ -6,8 +6,8 @@ namespace Mahjong.Mahjong
 {
     public class PlayerTypesEnum
     {
-        public static readonly string Client = "Client";
-        public static readonly string Substitute = "Substitute";
-        public static readonly string Staff = "Staff";
+        public static readonly string 客人 = "客人";
+        public static readonly string 代打 = "代打";
+        public static readonly string 戥脚 = "戥脚";
     }
 }

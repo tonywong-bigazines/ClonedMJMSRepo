@@ -4,14 +4,16 @@ using Mahjong.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Mahjong.Migrations
 {
     [DbContext(typeof(MahjongDbContext))]
-    partial class MahjongDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200427044859_update-TableSeat001")]
+    partial class updateTableSeat001
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1710,16 +1712,16 @@ namespace Mahjong.Migrations
                     b.Property<string>("DeviceConnectionId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PlayerCardId")
+                    b.Property<string>("HelpPlayStaffCardId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("PlayerType")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("PlayerCardId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Position")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("StaffCardId")
+                    b.Property<string>("StaffPlayerCardId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("TableId")
@@ -1727,9 +1729,11 @@ namespace Mahjong.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("HelpPlayStaffCardId");
+
                     b.HasIndex("PlayerCardId");
 
-                    b.HasIndex("StaffCardId");
+                    b.HasIndex("StaffPlayerCardId");
 
                     b.HasIndex("TableId");
 
@@ -2036,13 +2040,17 @@ namespace Mahjong.Migrations
 
             modelBuilder.Entity("Mahjong.Mahjong.TableSeat", b =>
                 {
+                    b.HasOne("Mahjong.Mahjong.Card", "HelpPlayStaffCard")
+                        .WithMany()
+                        .HasForeignKey("HelpPlayStaffCardId");
+
                     b.HasOne("Mahjong.Mahjong.Card", "PlayerCard")
                         .WithMany()
                         .HasForeignKey("PlayerCardId");
 
-                    b.HasOne("Mahjong.Mahjong.Card", "StaffCard")
+                    b.HasOne("Mahjong.Mahjong.Card", "StaffPlayerCard")
                         .WithMany()
-                        .HasForeignKey("StaffCardId");
+                        .HasForeignKey("StaffPlayerCardId");
 
                     b.HasOne("Mahjong.Mahjong.Table", "Table")
                         .WithMany("Seats")

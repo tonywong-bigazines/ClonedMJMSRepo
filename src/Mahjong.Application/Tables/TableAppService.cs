@@ -60,7 +60,7 @@ namespace Mahjong.Tables
             CheckOutByPlayerCardId(playerCardId);
 
             var seat = _tableSeatRepository.GetAll().FirstOrDefault(x => x.TableId == tableId && x.Position == position);
-
+            seat.PlayerType = PlayerTypesEnum.客人;
             seat.PlayerCardId = playerCardId;
             CurrentUnitOfWork.SaveChanges();
         }
@@ -80,6 +80,104 @@ namespace Mahjong.Tables
                 CurrentUnitOfWork.SaveChanges();
             }
         }
+
+        /// <summary>
+        /// 代打
+        /// </summary>
+        /// <param name="tableId"></param>
+        /// <param name="position"></param>
+        /// <param name="staffCardId"></param>
+        [HttpGet]
+        public void HelpClientPlay(int tableId, string position, string staffCardId)
+        {
+            _cardAppService.CardTypeVerification(staffCardId,CardTypes.Staff);
+
+            var seat = _tableSeatRepository.GetAll().FirstOrDefault(x => x.TableId == tableId && x.Position == position);
+
+            if (string.IsNullOrEmpty(seat.PlayerCardId))
+            {
+                throw new UserFriendlyException("No player in current seat.");
+            }
+
+            seat.PlayerType = PlayerTypesEnum.代打;
+            seat.StaffCardId = staffCardId;
+
+            CurrentUnitOfWork.SaveChanges();
+        }
+
+        /// <summary>
+        /// 结束代打
+        /// </summary>
+        /// <param name="tableId"></param>
+        /// <param name="position"></param>
+        /// <param name="staffCardId"></param>
+        [HttpGet]
+        public void EndHelpClientPlay(int tableId, string position, string staffCardId)
+        {
+            _cardAppService.CardTypeVerification(staffCardId, CardTypes.Staff);
+
+            var seat = _tableSeatRepository.GetAll().FirstOrDefault(x => x.TableId == tableId && x.Position == position);
+
+            if (string.IsNullOrEmpty(seat.PlayerCardId))
+            {
+                throw new UserFriendlyException("No player in current seat.");
+            }
+
+            seat.PlayerType = PlayerTypesEnum.客人;
+            seat.StaffCardId = null;
+
+            CurrentUnitOfWork.SaveChanges();
+        }
+
+
+        /// <summary>
+        /// 戥脚
+        /// </summary>
+        /// <param name="tableId"></param>
+        /// <param name="position"></param>
+        /// <param name="staffCardId"></param>
+        [HttpGet]
+        public void StaffPlay(int tableId, string position, string staffCardId)
+        {
+            _cardAppService.CardTypeVerification(staffCardId, CardTypes.Staff);
+
+            var seat = _tableSeatRepository.GetAll().FirstOrDefault(x => x.TableId == tableId && x.Position == position);
+
+            if (string.IsNullOrEmpty(seat.PlayerCardId))
+            {
+                throw new UserFriendlyException("No player in current seat.");
+            }
+
+            seat.PlayerType = PlayerTypesEnum.戥脚;
+            seat.StaffCardId = staffCardId;
+
+            CurrentUnitOfWork.SaveChanges();
+        }
+
+        /// <summary>
+        /// 结束戥脚
+        /// </summary>
+        /// <param name="tableId"></param>
+        /// <param name="position"></param>
+        /// <param name="staffCardId"></param>
+        [HttpGet]
+        public void EndStaffPlay(int tableId, string position, string staffCardId)
+        {
+            _cardAppService.CardTypeVerification(staffCardId, CardTypes.Staff);
+
+            var seat = _tableSeatRepository.GetAll().FirstOrDefault(x => x.TableId == tableId && x.Position == position);
+
+            if (string.IsNullOrEmpty(seat.PlayerCardId))
+            {
+                throw new UserFriendlyException("No player in current seat.");
+            }
+
+            seat.PlayerType = PlayerTypesEnum.客人;
+            seat.StaffCardId = null;
+
+            CurrentUnitOfWork.SaveChanges();
+        }
+
 
         [UnitOfWork]
         [RemoteService(false)]

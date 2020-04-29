@@ -14,10 +14,13 @@ namespace Mahjong.Mahjong
 
         public string DeviceConnectionId { get; set; }
 
+        public string PlayerType { get; set; }
+
         public string PlayerCardId { get; set; }
         public Card PlayerCard { get; set; }
-
-
+        
+        public string StaffCardId { get; set; }
+        public Card StaffCard { get; set; }
 
     }
 }

@@ -73,7 +73,7 @@ namespace Mahjong.Web.Startup
             builder =>
             {
                 builder.AllowAnyOrigin()
-                .AllowAnyMethod()
+                        .AllowAnyMethod()
                         .AllowAnyHeader();
             }));
 
