@@ -27,6 +27,31 @@ namespace Mahjong.Tables
             _cardAppService = cardAppService;
         }
 
+        public TableInfoDto GetTableInfo(int tableId)
+        {
+            var table = Repository.Get(tableId);
+            if (table == null)
+            {
+                throw new UserFriendlyException("Table not exist.");
+            }
+            var tableInfo = new TableInfoDto();
+            tableInfo.Id = table.Id;
+            tableInfo.MaxAmount = table.MaxAmount;
+            tableInfo.MinAmount = table.MinAmount;
+            tableInfo.Name = table.Name;
+            tableInfo.Description = table.Description;
+            tableInfo.Commission1 = table.MaxAmount * table.CommissionRate1;
+            tableInfo.Commission2 = table.MaxAmount * table.CommissionRate2;
+            tableInfo.Commission3 = table.MaxAmount * table.CommissionRate3;
+            tableInfo.Commission4 = table.MaxAmount * table.CommissionRate4;
+            tableInfo.Commission5 = table.MaxAmount * table.CommissionRate5;
+            tableInfo.Commission6 = table.MaxAmount * table.CommissionRate6;
+            tableInfo.Commission7 = table.MaxAmount * table.CommissionRate7;
+            tableInfo.Commission8 = table.MaxAmount * table.CommissionRate8;
+            tableInfo.Commission9 = table.MaxAmount * table.CommissionRate9;
+            return tableInfo;
+        }
+
         public override async Task<TableDto> CreateAsync(CreateTableDto input)
         {
             CheckCreatePermission();

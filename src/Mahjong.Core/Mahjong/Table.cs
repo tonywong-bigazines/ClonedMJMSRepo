@@ -24,6 +24,16 @@ namespace Mahjong.Mahjong
 
         public virtual List<TableSeat> Seats { get; set; }
 
+        public decimal CommissionRate1 { get; set; }
+        public decimal CommissionRate2 { get; set; }
+        public decimal CommissionRate3 { get; set; }
+        public decimal CommissionRate4 { get; set; }
+        public decimal CommissionRate5 { get; set; }
+        public decimal CommissionRate6 { get; set; }
+        public decimal CommissionRate7 { get; set; }
+        public decimal CommissionRate8{ get; set; }
+        public decimal CommissionRate9 { get; set; }
+
         public Table()
         {
             Seats = new List<TableSeat>();

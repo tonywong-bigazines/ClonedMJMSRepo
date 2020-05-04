@@ -73,18 +73,26 @@ namespace Mahjong.Actions
                 throw new UserFriendlyException("Invalid operator id.");
             }
 
-            /*foreach (var player in input.Players)
-            { 
-                //驗證 player card | staff card ?
-            }*/
-
-            var table = _tableRepository.Get(input.TableId);
+            var table = _tableRepository.GetAllIncluding(x=>x.Seats).FirstOrDefault(x=>x.Id == input.TableId);
 
             var playHistory = _playHistoryRepository.GetAll().FirstOrDefault(x => x.TableId == input.TableId && x.Round == table.Round && x.IsPlaying == true);
 
             var isNewRound = playHistory == null;
 
-            var playerEntities = _objectMapper.Map<List<PlayHistoryDetailPlayer>>(input.Players);
+            var playerEntities = new List<PlayHistoryDetailPlayer>();
+            var relatedSeats = table.Seats.Where(x => input.Players.Any(m => m.Position == x.Position)).ToList();
+            foreach (var seat in relatedSeats)
+            {
+                var player = new PlayHistoryDetailPlayer() {
+                    PlayerCardId = seat.PlayerCardId,
+                    PlayerType = seat.PlayerType,
+                    Position = seat.Position,
+                    StaffCardId = seat.StaffCardId,
+                    WinOrLose = input.Players.FirstOrDefault(x => x.Position == seat.Position).WinOrLose
+                };
+                playerEntities.Add(player);
+            }
+
 
             if (isNewRound)
             {
@@ -128,12 +136,12 @@ namespace Mahjong.Actions
             }            
         }
 
-        public List<PlayHistoryDto> GetPlayHistories(int tableId, string position)
+        public List<PlayHistoryDto> GetTableHistories(int tableId)
         {
             var playHistories = _dbContext.PlayHistoreis
                 .Include(x => x.PlayHistoryDetails)
                 .ThenInclude(phd => phd.Players)
-                .Where(x => x.TableId == tableId && x.IsPlaying == true && x.PlayHistoryDetails.Any(phd => phd.Players.Any(plr => plr.Position == position)))
+                .Where(x => x.TableId == tableId && x.IsPlaying == true )
                 .OrderBy(x => x.CreationTime)
                 .ToList();
             var result = _objectMapper.Map<List<PlayHistoryDto>>(playHistories);

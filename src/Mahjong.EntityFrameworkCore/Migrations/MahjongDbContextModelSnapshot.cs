@@ -1653,6 +1653,33 @@ namespace Mahjong.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<decimal>("CommissionRate1")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("CommissionRate2")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("CommissionRate3")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("CommissionRate4")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("CommissionRate5")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("CommissionRate6")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("CommissionRate7")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("CommissionRate8")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("CommissionRate9")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2");
 

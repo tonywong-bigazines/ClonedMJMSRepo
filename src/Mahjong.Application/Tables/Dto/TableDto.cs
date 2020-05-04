@@ -11,6 +11,6 @@ namespace Mahjong.Tables.Dto
     [AutoMapFrom(typeof(Table))]
     public class TableDto : EntityDto<int>
     {
-       
+        
     }
 }
