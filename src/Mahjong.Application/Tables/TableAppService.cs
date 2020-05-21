@@ -7,6 +7,7 @@ using Mahjong.Cards;
 using Mahjong.Mahjong;
 using Mahjong.Tables.Dto;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,13 +19,18 @@ namespace Mahjong.Tables
     public class TableAppService : AsyncCrudAppService<Table, TableDto, int, PagedTableResultRequestDto, CreateTableDto, TableDto>
     {
         private readonly IRepository<TableSeat> _tableSeatRepository;
+        private readonly IRepository<Card,string> _cardRepository;
         private readonly CardAppService _cardAppService;
 
-        public TableAppService(IRepository<Table> repository, IRepository<TableSeat> tableSeatRepository, CardAppService cardAppService)
+        public TableAppService(IRepository<Table> repository, 
+            IRepository<TableSeat> tableSeatRepository,
+            CardAppService cardAppService,
+            IRepository<Card, string> cardRepository)
            : base(repository)
         {
             _tableSeatRepository = tableSeatRepository;
             _cardAppService = cardAppService;
+            _cardRepository = cardRepository;
         }
 
         public TableInfoDto GetTableInfo(int tableId)
@@ -40,15 +46,15 @@ namespace Mahjong.Tables
             tableInfo.MinAmount = table.MinAmount;
             tableInfo.Name = table.Name;
             tableInfo.Description = table.Description;
-            tableInfo.Commission1 = table.MaxAmount * table.CommissionRate1;
-            tableInfo.Commission2 = table.MaxAmount * table.CommissionRate2;
-            tableInfo.Commission3 = table.MaxAmount * table.CommissionRate3;
-            tableInfo.Commission4 = table.MaxAmount * table.CommissionRate4;
-            tableInfo.Commission5 = table.MaxAmount * table.CommissionRate5;
-            tableInfo.Commission6 = table.MaxAmount * table.CommissionRate6;
-            tableInfo.Commission7 = table.MaxAmount * table.CommissionRate7;
-            tableInfo.Commission8 = table.MaxAmount * table.CommissionRate8;
-            tableInfo.Commission9 = table.MaxAmount * table.CommissionRate9;
+            tableInfo.Commission1 = table.MaxAmount * table.PayCommissionRate1;
+            tableInfo.Commission2 = table.MaxAmount * table.PayCommissionRate2;
+            tableInfo.Commission3 = table.MaxAmount * table.PayCommissionRate3;
+            tableInfo.Commission4 = table.MaxAmount * table.PayCommissionRate4;
+            tableInfo.Commission5 = table.MaxAmount * table.PayCommissionRate5;
+            tableInfo.Commission6 = table.MaxAmount * table.PayCommissionRate6;
+            tableInfo.Commission7 = table.MaxAmount * table.PayCommissionRate7;
+            tableInfo.Commission8 = table.MaxAmount * table.PayCommissionRate8;
+            tableInfo.Commission9 = table.MaxAmount * table.PayCommissionRate9;
             return tableInfo;
         }
 
@@ -78,9 +84,11 @@ namespace Mahjong.Tables
         /// <param name="position"></param>
         /// <param name="playerCardId"></param>
         [HttpGet]
-        public void CheckIn(int tableId, string position, string playerCardId)
+        public object CheckIn(int tableId, string position, string playerCardId)
         {
             _cardAppService.CardTypeVerification(playerCardId, CardTypes.Client, CardTypes.Staff, CardTypes.FakeClient);
+
+            var card = _cardRepository.Get(playerCardId);
 
             CheckOutByPlayerCardId(playerCardId);
 
@@ -88,6 +96,8 @@ namespace Mahjong.Tables
             seat.PlayerType = PlayerTypesEnum.客人;
             seat.PlayerCardId = playerCardId;
             CurrentUnitOfWork.SaveChanges();
+
+            return new { Commission = card.Commission };
         }
 
         /// <summary>

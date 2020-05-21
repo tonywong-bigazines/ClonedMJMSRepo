@@ -23,5 +23,8 @@ namespace Mahjong.EntityFrameworkCore
         public DbSet<PlayHistory> PlayHistoreis { get; set; }
         public DbSet<PlayHistoryDetail> PlayHistoryDetails { get; set; }
         public DbSet<PlayHistoryDetailPlayer> PlayHistoryDetailPlayers { get; set; }
+
+        public DbSet<MahJongAction> MahJongActions { get; set; }
+        public DbSet<PayCommissionRecord> PayCommissionRecords { get; set; }
     }
 }

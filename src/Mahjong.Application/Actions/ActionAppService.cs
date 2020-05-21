@@ -18,12 +18,15 @@ using Abp.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.SignalR;
 using Mahjong.SignalRService;
+using System.Data;
 
 namespace Mahjong.Actions
 {
     public class ActionAppService: AbpServiceBase,IApplicationService
     {
         private readonly IObjectMapper _objectMapper;
+        private readonly IRepository<MahJongAction> _mjActionRepository;
+        private readonly IRepository<PayCommissionRecord> _payCommissionRecordRepository;
         private readonly IRepository<Table> _tableRepository;
         private readonly IRepository<TableSeat> _tableSeatRepository;
         private readonly IRepository<Card,string> _cardRepository;
@@ -36,11 +39,13 @@ namespace Mahjong.Actions
 
         public ActionAppService(IObjectMapper objectMapper,
             IRepository<Table> tableRepository,
+            IRepository<PayCommissionRecord> payCommissionRecordRepository,
             IRepository<TableSeat> tableSeatRepository,
             IRepository<Card,string> cardRepository,
             IRepository<PlayHistory> playHistoryRepository,
             IRepository<PlayHistoryDetail> playHistoryDetailRepository,
             IDbContextProvider<MahjongDbContext> dbContextProvider,
+            IRepository<MahJongAction> mjActionRepository,
             IHubContext<RecordHub> hubContext)
         {
             _objectMapper = objectMapper;
@@ -51,7 +56,11 @@ namespace Mahjong.Actions
             _playHistoryDetailRepository = playHistoryDetailRepository;
             _dbContextProvider = dbContextProvider;
             _hubContext = hubContext;
+            _mjActionRepository = mjActionRepository;
+            _payCommissionRecordRepository = payCommissionRecordRepository;
         }
+
+        
 
         public void Create(CreateActionDto input)
         {
@@ -80,7 +89,9 @@ namespace Mahjong.Actions
             var isNewRound = playHistory == null;
 
             var playerEntities = new List<PlayHistoryDetailPlayer>();
+
             var relatedSeats = table.Seats.Where(x => input.Players.Any(m => m.Position == x.Position)).ToList();
+
             foreach (var seat in relatedSeats)
             {
                 var player = new PlayHistoryDetailPlayer() {
@@ -88,7 +99,8 @@ namespace Mahjong.Actions
                     PlayerType = seat.PlayerType,
                     Position = seat.Position,
                     StaffCardId = seat.StaffCardId,
-                    WinOrLose = input.Players.FirstOrDefault(x => x.Position == seat.Position).WinOrLose
+                    WinOrLose = input.Players.FirstOrDefault(x => x.Position == seat.Position).WinOrLose,
+                    Bonus = input.Players.FirstOrDefault(x => x.Position == seat.Position).Bonus
                 };
                 playerEntities.Add(player);
             }
@@ -114,6 +126,7 @@ namespace Mahjong.Actions
                 Players = playerEntities,
                 PlayHistoryId = playHistory.Id
             };
+
             _playHistoryDetailRepository.Insert(newPlayHistoryDetail);
 
             //結束當前回合的標誌Action
@@ -123,7 +136,115 @@ namespace Mahjong.Actions
             }
             
             var actionDto = _objectMapper.Map<PlayHistoryDetailDto>(newPlayHistoryDetail);
+
             PushNewRecord(table.Id, actionDto);
+
+            var winners = playerEntities.Where(x => x.WinOrLose == "Win").ToList();
+
+            //計算Commission
+            foreach (var winner in winners)
+            {
+                var commission = EvaluateCommission(input.MahjongActionName, table,winner.Bonus);
+                var playerCard = _cardRepository.Get(winner.PlayerCardId);
+                playerCard.Commission += commission;
+
+                PushCommission(table.Id, winner.Position, playerCard.Commission);
+            }
+            CurrentUnitOfWork.SaveChanges();
+        }
+
+        public void PayAllCommission(int tableId, string position, string operatorId)
+        {
+            var tableExist = _tableRepository.GetAll().Any(x => x.Id == tableId);
+            if (!tableExist)
+            {
+                throw new UserFriendlyException("Invalid table id.");
+            }
+
+            var isValidOperator = _cardRepository.GetAll().Any(x => x.Id == operatorId && x.CardType == CardTypes.Staff);
+            if (!isValidOperator)
+            {
+                throw new UserFriendlyException("Invalid operator id.");
+            }
+
+            var seat = _tableSeatRepository.GetAll().FirstOrDefault(x => x.TableId == tableId && x.Position == position);
+
+            if (seat == null)
+            {
+                throw new UserFriendlyException("Invalid parameters.");
+            }
+
+            var playerCard = _cardRepository.Get(seat.PlayerCardId);
+            var commission = playerCard.Commission;
+            playerCard.Commission  = 0;
+
+            var record = new PayCommissionRecord();
+            record.Amount = commission;
+            record.PlayerCardId = playerCard.Id;
+            record.OperatorCardId = operatorId;
+
+            _payCommissionRecordRepository.Insert(record);
+
+            PushCommission(tableId, position, 0);
+            CurrentUnitOfWork.SaveChanges();
+        }
+
+        public void PayCommission(int tableId, string position, decimal amount, string operatorId)
+        {
+            var tableExist = _tableRepository.GetAll().Any(x => x.Id == tableId);
+            if (!tableExist)
+            {
+                throw new UserFriendlyException("Invalid table id.");
+            }
+            
+            var isValidOperator = _cardRepository.GetAll().Any(x => x.Id == operatorId && x.CardType == CardTypes.Staff);
+            if (!isValidOperator)
+            {
+                throw new UserFriendlyException("Invalid operator id.");
+            }
+
+            var seat = _tableSeatRepository.GetAll().FirstOrDefault(x => x.TableId == tableId && x.Position == position);
+
+            if (seat == null)
+            {
+                throw new UserFriendlyException("Invalid parameters.");
+            }
+
+            var playerCard = _cardRepository.Get(seat.PlayerCardId);
+            playerCard.Commission -= amount;
+
+            var record = new PayCommissionRecord();
+            record.Amount = amount;
+            record.PlayerCardId = playerCard.Id;
+            record.OperatorCardId = operatorId;
+
+            _payCommissionRecordRepository.Insert(record);
+
+            PushCommission(tableId, position, playerCard.Commission);
+            CurrentUnitOfWork.SaveChanges();
+        }
+
+
+        private decimal EvaluateCommission(string mahjongActionName, Table table, int bonus)
+        {
+            var mjAction = _mjActionRepository.GetAll().FirstOrDefault(x => x.Name == mahjongActionName);
+
+            if (mjAction == null)
+            {
+                throw new UserFriendlyException("Mahjong action not exist.");
+            }
+
+            var expression = mjAction.CommissionFormula
+                .Replace("MinAmount", table.MinAmount.ToString())
+                .Replace("MaxAmount", table.MaxAmount.ToString())
+                .Replace("CommissionRate", table.CommissionRate.ToString())
+                .Replace("Bonus", bonus.ToString());
+
+            var loDataTable = new DataTable();
+            var loDataColumn = new DataColumn("Eval", typeof(decimal), expression);
+            loDataTable.Columns.Add(loDataColumn);
+            loDataTable.Rows.Add(0);
+            return (decimal)(loDataTable.Rows[0]["Eval"]);
         }
 
         private async void PushNewRecord(int tableId, PlayHistoryDetailDto action)
@@ -133,6 +254,15 @@ namespace Mahjong.Actions
             {
                 var connections = seats.Select(x => x.DeviceConnectionId).ToList();
                 await _hubContext.Clients.Clients(connections).SendAsync("newRecord", action);
+            }
+        }
+
+        private async void PushCommission(int tableId, string position, decimal commission)
+        {
+            var seat = _tableSeatRepository.GetAll().FirstOrDefault(x => x.TableId == tableId && x.Position == position);
+            if (seat != null)
+            {
+                await _hubContext.Clients.Client(seat.DeviceConnectionId).SendAsync("commissionUpdate", commission);
             }            
         }
 

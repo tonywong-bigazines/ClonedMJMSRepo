@@ -16,5 +16,7 @@ namespace Mahjong.Mahjong
         public string StaffCardId { get; set; }
         public Card StaffCard { get; set; }
         public string WinOrLose { get; set; }
+
+        public int Bonus { get; set; }
     }
 }

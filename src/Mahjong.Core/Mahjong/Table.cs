@@ -19,20 +19,23 @@ namespace Mahjong.Mahjong
 
         public decimal MinAmount { get; set; }
         public decimal MaxAmount { get; set; }
+        public decimal CommissionRate { get; set; }
 
         public int Round { get; set; }
 
         public virtual List<TableSeat> Seats { get; set; }
 
-        public decimal CommissionRate1 { get; set; }
-        public decimal CommissionRate2 { get; set; }
-        public decimal CommissionRate3 { get; set; }
-        public decimal CommissionRate4 { get; set; }
-        public decimal CommissionRate5 { get; set; }
-        public decimal CommissionRate6 { get; set; }
-        public decimal CommissionRate7 { get; set; }
-        public decimal CommissionRate8{ get; set; }
-        public decimal CommissionRate9 { get; set; }
+        
+
+        public decimal PayCommissionRate1 { get; set; }
+        public decimal PayCommissionRate2 { get; set; }
+        public decimal PayCommissionRate3 { get; set; }
+        public decimal PayCommissionRate4 { get; set; }
+        public decimal PayCommissionRate5 { get; set; }
+        public decimal PayCommissionRate6 { get; set; }
+        public decimal PayCommissionRate7 { get; set; }
+        public decimal PayCommissionRate8{ get; set; }
+        public decimal PayCommissionRate9 { get; set; }
 
         public Table()
         {

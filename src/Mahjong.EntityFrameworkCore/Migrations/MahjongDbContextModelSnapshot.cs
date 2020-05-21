@@ -1556,6 +1556,91 @@ namespace Mahjong.Migrations
                     b.ToTable("Cards");
                 });
 
+            modelBuilder.Entity("Mahjong.Mahjong.MahJongAction", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CommissionFormula")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("CreatorUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("DeleterUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("LastModifierUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MahJongActions");
+                });
+
+            modelBuilder.Entity("Mahjong.Mahjong.PayCommissionRecord", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("CreatorUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("DeleterUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("LastModifierUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("OperatorCardId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("PlayerCardId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OperatorCardId");
+
+                    b.HasIndex("PlayerCardId");
+
+                    b.ToTable("PayCommissionRecords");
+                });
+
             modelBuilder.Entity("Mahjong.Mahjong.PlayHistory", b =>
                 {
                     b.Property<int>("Id")
@@ -1617,6 +1702,9 @@ namespace Mahjong.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("Bonus")
+                        .HasColumnType("int");
+
                     b.Property<int>("PlayHistoryDetailId")
                         .HasColumnType("int");
 
@@ -1653,31 +1741,7 @@ namespace Mahjong.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<decimal>("CommissionRate1")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("CommissionRate2")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("CommissionRate3")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("CommissionRate4")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("CommissionRate5")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("CommissionRate6")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("CommissionRate7")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("CommissionRate8")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("CommissionRate9")
+                    b.Property<decimal>("CommissionRate")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("CreationTime")
@@ -1714,6 +1778,33 @@ namespace Mahjong.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
+
+                    b.Property<decimal>("PayCommissionRate1")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("PayCommissionRate2")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("PayCommissionRate3")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("PayCommissionRate4")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("PayCommissionRate5")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("PayCommissionRate6")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("PayCommissionRate7")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("PayCommissionRate8")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("PayCommissionRate9")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Round")
                         .HasColumnType("int");
@@ -2020,6 +2111,17 @@ namespace Mahjong.Migrations
                     b.HasOne("Mahjong.Authorization.Users.User", "LastModifierUser")
                         .WithMany()
                         .HasForeignKey("LastModifierUserId");
+                });
+
+            modelBuilder.Entity("Mahjong.Mahjong.PayCommissionRecord", b =>
+                {
+                    b.HasOne("Mahjong.Mahjong.Card", "OperatorCard")
+                        .WithMany()
+                        .HasForeignKey("OperatorCardId");
+
+                    b.HasOne("Mahjong.Mahjong.Card", "PlayerCard")
+                        .WithMany()
+                        .HasForeignKey("PlayerCardId");
                 });
 
             modelBuilder.Entity("Mahjong.Mahjong.PlayHistory", b =>

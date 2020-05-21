@@ -9,6 +9,7 @@ namespace Mahjong.Actions.Dto
     [AutoMapTo(typeof(PlayHistoryDetailPlayer))]
     public class PlayHistoryDetailPlayerDto
     { 
+        public int Bonus { get; set; }
         public string Position { get; set; }
         public string WinOrLose { get; set; }
     }
