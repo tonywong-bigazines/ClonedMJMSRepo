@@ -1,0 +1,29 @@
+﻿@using Abp.Authorization.Users
+@using Mahjong.Web.Models.Common.Modals
+@using Mahjong.Web.Models.Tables
+@model List<Mahjong.PlayHistories.Dto.PlayHistoryDto>
+@{
+    Layout = null;
+}
+@await Html.PartialAsync("~/Views/Shared/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(L("Histories")))
+<ul class="play-histories list-unstyled">
+    @foreach (var history in Model)
+    {
+        <li class="play-history">
+            <ul class="play-history-details list-unstyled">
+                @foreach (var detail in history.PlayHistoryDetails)
+                {
+                    <li>
+                        <span class="action-name">@detail.MohjongActionName</span>
+                        <span class="players">
+                            @foreach (var player in detail.Players)
+                            { 
+                                <span class="player @player.WinOrLose @player.Position"></span>
+                            }
+                        </span>
+                    </li>
+                }
+            </ul>
+        </li>
+    }
+</ul>

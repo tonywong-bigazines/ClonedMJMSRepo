@@ -136,5 +136,17 @@
     "inputFiles": [
       "wwwroot/view-resources/Views/Shared/Components/TenantChange/_ChangeModal.js"
     ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Views/Tables/Index.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Views/Tables/Index.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Views/Cards/Index.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Views/Cards/Index.js"
+    ]
   }
 ]

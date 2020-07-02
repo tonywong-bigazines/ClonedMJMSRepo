@@ -1,7 +1,7 @@
 ﻿@using Mahjong.Web.Views.Shared.Components.SideBarMenu
 @model SideBarMenuViewModel
 @{ 
-    var orderedMenuItems = Model.MainMenu.Items.Where(x => x.IsVisible).OrderByCustom().ToList();
+    var orderedMenuItems = Model.MainMenu.Items.Where(x => x.IsVisible).ToList();
 }
 
 <nav class="mt-2">
@@ -13,4 +13,7 @@
             }
         }
     </ul>
+    <div style="text-align:center; margin-top:30px;">
+        <a class="btn btn-danger btn-block" href="/tables/clearData" target="_blank">Clear Data</a>
+    </div>
 </nav>

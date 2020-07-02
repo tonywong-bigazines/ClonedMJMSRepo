@@ -1551,6 +1551,9 @@ namespace Mahjong.Migrations
                     b.Property<long?>("LastModifierUserId")
                         .HasColumnType("bigint");
 
+                    b.Property<decimal>("Total")
+                        .HasColumnType("decimal(18,2)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Cards");
@@ -1587,7 +1590,13 @@ namespace Mahjong.Migrations
                     b.Property<long?>("LastModifierUserId")
                         .HasColumnType("bigint");
 
+                    b.Property<string>("LoseAmountFormula")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("WinAmountFormula")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -1828,6 +1837,12 @@ namespace Mahjong.Migrations
                     b.Property<string>("DeviceConnectionId")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<decimal>("HelpPlayAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool>("HelpPlaying")
+                        .HasColumnType("bit");
+
                     b.Property<string>("PlayerCardId")
                         .HasColumnType("nvarchar(450)");
 
@@ -1836,6 +1851,9 @@ namespace Mahjong.Migrations
 
                     b.Property<string>("Position")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Round")
+                        .HasColumnType("int");
 
                     b.Property<string>("StaffCardId")
                         .HasColumnType("nvarchar(450)");

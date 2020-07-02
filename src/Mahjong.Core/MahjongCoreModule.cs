@@ -33,6 +33,8 @@ namespace Mahjong
             AppRoleConfig.Configure(Configuration.Modules.Zero().RoleManagement);
 
             Configuration.Settings.Providers.Add<AppSettingProvider>();
+
+            Configuration.Localization.WrapGivenTextIfNotFound = false;
         }
 
         public override void Initialize()

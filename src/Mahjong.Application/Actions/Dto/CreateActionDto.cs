@@ -7,6 +7,7 @@ using Abp.AutoMapper;
 using Abp.Runtime.Validation;
 using Mahjong.Authorization.Users;
 using Mahjong.Mahjong;
+using Mahjong.PlayHistories.Dto;
 
 namespace Mahjong.Actions.Dto
 {

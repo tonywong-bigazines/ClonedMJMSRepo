@@ -1,12 +1,19 @@
 ﻿using Abp.Application.Services;
+using Abp.Application.Services.Dto;
 using Abp.Authorization;
 using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
+using Abp.EntityFrameworkCore;
+using Abp.ObjectMapping;
 using Abp.UI;
+using Mahjong.Actions.Dto;
 using Mahjong.Cards;
+using Mahjong.EntityFrameworkCore;
 using Mahjong.Mahjong;
+using Mahjong.PlayHistories.Dto;
 using Mahjong.Tables.Dto;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -18,19 +25,55 @@ namespace Mahjong.Tables
 {
     public class TableAppService : AsyncCrudAppService<Table, TableDto, int, PagedTableResultRequestDto, CreateTableDto, TableDto>
     {
+        private readonly IObjectMapper _objectMapper;
         private readonly IRepository<TableSeat> _tableSeatRepository;
         private readonly IRepository<Card,string> _cardRepository;
         private readonly CardAppService _cardAppService;
+        private readonly IDbContextProvider<MahjongDbContext> _dbContextProvider;
+        private MahjongDbContext _dbContext => _dbContextProvider.GetDbContext();
 
-        public TableAppService(IRepository<Table> repository, 
+        public TableAppService(
+            IObjectMapper objectMapper,
+            IRepository<Table> repository, 
             IRepository<TableSeat> tableSeatRepository,
             CardAppService cardAppService,
+            IDbContextProvider<MahjongDbContext> dbContextProvider,
             IRepository<Card, string> cardRepository)
            : base(repository)
         {
+            _objectMapper = objectMapper;
             _tableSeatRepository = tableSeatRepository;
             _cardAppService = cardAppService;
             _cardRepository = cardRepository;
+            _dbContextProvider = dbContextProvider;
+        }
+
+        public async Task<PagedResultDto<TableDto>> GetAllWithSeats(PagedTableResultRequestDto input)
+        {
+            var query = CreateFilteredQuery(input);
+
+            query = query.Include(x => x.Seats).ThenInclude(x=>x.PlayerCard);
+
+            var totalCount = await AsyncQueryableExecuter.CountAsync(query);
+
+            query = ApplySorting(query, input);
+            query = ApplyPaging(query, input);
+
+            var entities = await AsyncQueryableExecuter.ToListAsync(query);
+
+            return new PagedResultDto<TableDto>(
+                totalCount,
+                entities.Select(MapToEntityDto).ToList()
+            );
+        }
+
+        public TableDto GetSeats(int tableId)
+        {
+
+            var query = Repository.GetAll().Include(x => x.Seats).ThenInclude(x=>x.PlayerCard).FirstOrDefault(x=>x.Id==tableId);
+
+
+            return MapToEntityDto(query);
         }
 
         public TableInfoDto GetTableInfo(int tableId)
@@ -93,11 +136,11 @@ namespace Mahjong.Tables
             CheckOutByPlayerCardId(playerCardId);
 
             var seat = _tableSeatRepository.GetAll().FirstOrDefault(x => x.TableId == tableId && x.Position == position);
-            seat.PlayerType = PlayerTypesEnum.客人;
+            seat.PlayerType = card.CardType == CardTypes.Client ? PlayerTypesEnum.客人 : PlayerTypesEnum.戥脚;
             seat.PlayerCardId = playerCardId;
             CurrentUnitOfWork.SaveChanges();
 
-            return new { Commission = card.Commission };
+            return new { Commission = card.Commission, CardType = card.CardType };
         }
 
         /// <summary>
@@ -136,6 +179,8 @@ namespace Mahjong.Tables
 
             seat.PlayerType = PlayerTypesEnum.代打;
             seat.StaffCardId = staffCardId;
+            seat.Round = 0;
+            seat.HelpPlayAmount = 0;
 
             CurrentUnitOfWork.SaveChanges();
         }
@@ -204,7 +249,7 @@ namespace Mahjong.Tables
 
             if (string.IsNullOrEmpty(seat.PlayerCardId))
             {
-                throw new UserFriendlyException("No player in current seat.");
+                 
             }
 
             seat.PlayerType = PlayerTypesEnum.客人;
@@ -224,6 +269,18 @@ namespace Mahjong.Tables
                 seat.DeviceConnectionId = connectionId;
                 CurrentUnitOfWork.SaveChanges();
             }
+        }
+
+        public List<PlayHistoryDto> GetTableHistories(int tableId)
+        {
+            var playHistories = _dbContext.PlayHistoreis
+                .Include(x => x.PlayHistoryDetails)
+                .ThenInclude(phd => phd.Players)
+                .Where(x => x.TableId == tableId && x.IsPlaying == true)
+                .OrderBy(x => x.CreationTime)
+                .ToList();
+            var result = _objectMapper.Map<List<PlayHistoryDto>>(playHistories);
+            return result;
         }
 
         private void CheckOutByPlayerCardId(string playerCardId)

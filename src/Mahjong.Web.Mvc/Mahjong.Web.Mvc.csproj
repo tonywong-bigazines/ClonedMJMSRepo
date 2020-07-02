@@ -16,6 +16,14 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="wwwroot\js\about.a2126be0.js" />
+    <None Include="wwwroot\js\about.a2126be0.js.map" />
+    <None Include="wwwroot\js\abp.dataTable.js" />
+    <None Include="wwwroot\js\app.c58b1494.js" />
+    <None Include="wwwroot\js\app.c58b1494.js.map" />
+    <None Include="wwwroot\js\chunk-vendors.617777a1.js" />
+    <None Include="wwwroot\js\chunk-vendors.617777a1.js.map" />
+    <None Include="wwwroot\js\main.js" />
     <None Update="Dockerfile">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -50,6 +58,37 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="wwwroot\libs\" />
+    <Folder Include="wwwroot\Cashier\" />
     <Folder Include="wwwroot\view-resources\Views\_Bundles\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Update="wwwroot\Cashier\index.html">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="wwwroot\view-resources\Views\Cards\Index.js">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="wwwroot\view-resources\Views\Cards\Index.min.js">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="wwwroot\view-resources\Views\Cards\_EditModal.js">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="wwwroot\view-resources\Views\Tables\Index.js">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="wwwroot\view-resources\Views\Tables\Index.min.js">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="wwwroot\view-resources\Views\Tables\_EditModal.js">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 </Project>

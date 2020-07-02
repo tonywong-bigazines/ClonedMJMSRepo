@@ -22,5 +22,11 @@ namespace Mahjong.Mahjong
         public string StaffCardId { get; set; }
         public Card StaffCard { get; set; }
 
+        public bool HelpPlaying { get; set; }
+
+        public int Round { get; set; }
+
+        public decimal HelpPlayAmount { get; set; }
+
     }
 }

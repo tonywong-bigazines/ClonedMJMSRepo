@@ -29,3 +29,56 @@ html {
 .famfamfam-flags {
     display: inline-block;
 }
+.play-histories {
+    margin-top:20px;
+}
+.play-histories > li {
+    list-style: none;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 8px;
+    padding-left: 25px;
+    margin-bottom: 8px;
+}
+.play-histories .player {
+    display: inline-block;
+    border-style: solid;
+}
+.play-histories .players {
+    display:inline-block;
+    vertical-align:middle;
+    position:relative;
+    top:2px;
+}
+.play-histories .action-name {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right:10px;
+}
+
+.play-histories .player.East {
+    border-color: #9500DB
+}
+.play-histories .player.South {
+    border-color: #D60100
+}
+.play-histories .player.West {
+    border-color: #F38802
+}
+.play-histories .player.North {
+    border-color: #00E300
+}
+.play-histories .player.Win {
+    border-top-width: 7.5px;
+    border-left-width: 7.5px;
+    border-right-width: 7.5px;
+    border-bottom-width: 7.5px;
+    border-radius:20px;
+}
+.play-histories .player.Lose {
+    border-top: 0;
+    border-left-width: 7.5px;
+    border-right-width: 7.5px;
+    border-left-color: transparent;
+    border-right-color: transparent;
+    border-bottom-width: 15px;
+}

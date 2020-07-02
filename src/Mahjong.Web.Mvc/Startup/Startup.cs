@@ -61,7 +61,9 @@ namespace Mahjong.Web.Startup
 
             services.AddScoped<IWebResourceManager, WebResourceManager>();
 
-            services.AddSignalR();
+            services.AddSignalR(options=>{
+                options.EnableDetailedErrors = true;
+            });
 
             services.AddSwaggerGen(options =>
             {

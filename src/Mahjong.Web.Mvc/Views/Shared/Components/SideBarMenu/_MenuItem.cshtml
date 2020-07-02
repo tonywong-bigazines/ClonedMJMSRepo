@@ -5,7 +5,7 @@
 @inject ILanguageManager LanguageManager
 @{
     var isActive = IsActiveMenuItem(Model, ViewBag.CurrentPageName);
-    var subMenus = Model.Items.Where(x => x.IsVisible).OrderByCustom().ToList();
+    var subMenus = Model.Items.Where(x => x.IsVisible).ToList();
     var hasSubMenus = subMenus.Any();
 }
 @functions {

@@ -10,5 +10,11 @@ namespace Mahjong.Mahjong
     {
         public string Name { get; set; }
         public string CommissionFormula { get; set; }
+
+        public string WinAmountFormula { get; set; }
+
+        public string LoseAmountFormula { get; set; }
+
+
     }
 }

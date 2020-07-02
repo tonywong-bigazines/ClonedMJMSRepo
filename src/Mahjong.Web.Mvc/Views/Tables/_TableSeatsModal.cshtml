@@ -1,0 +1,29 @@
+﻿@using Abp.Authorization.Users
+@using Mahjong.Web.Models.Common.Modals
+@using Mahjong.Web.Models.Tables
+@model EditTableModalViewModel
+@{
+    Layout = null;
+}
+@await Html.PartialAsync("~/Views/Shared/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(L("Seats")))
+<table class="table">
+    <thead>
+        <tr>
+            <th>位置</th>
+            <th>玩家類型</th>
+            <th>客戶卡</th>
+            <th>員工卡</th>
+            <th>水錢</th>
+        </tr>
+    </thead>
+    @foreach (var seat in Model.Table.Seats)
+    { 
+        <tr>
+            <td>@seat.Position</td>
+            <td>@seat.PlayerType</td>
+            <td>@seat.PlayerCardId</td>
+            <td>@(seat.PlayerType != Mahjong.Mahjong.PlayerTypesEnum.客人 ? seat.StaffCardId : "")</td>
+            <td>@(seat.PlayerCard!=null?seat.PlayerCard.Commission:0)</td>
+        </tr>
+    }    
+</table>

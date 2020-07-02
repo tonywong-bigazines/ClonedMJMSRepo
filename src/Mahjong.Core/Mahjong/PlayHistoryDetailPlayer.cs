@@ -18,5 +18,19 @@ namespace Mahjong.Mahjong
         public string WinOrLose { get; set; }
 
         public int Bonus { get; set; }
+
+        public bool IsWinner { 
+            get {
+                return WinOrLose == "Win";
+            }
+        }
+
+        public bool IsLoser
+        {
+            get
+            {
+                return WinOrLose == "Lose";
+            }
+        }
     }
 }

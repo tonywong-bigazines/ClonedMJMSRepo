@@ -21,6 +21,20 @@ namespace Mahjong.Tables.Dto
         [MaxLength(50)]
         public string Status { get; set; }
 
-        public int Amount { get; set; }
+        public decimal MinAmount { get; set; }
+        public decimal MaxAmount { get; set; }
+        public decimal CommissionRate { get; set; }
+
+        public int Round { get; set; }
+
+        public decimal PayCommissionRate1 { get; set; }
+        public decimal PayCommissionRate2 { get; set; }
+        public decimal PayCommissionRate3 { get; set; }
+        public decimal PayCommissionRate4 { get; set; }
+        public decimal PayCommissionRate5 { get; set; }
+        public decimal PayCommissionRate6 { get; set; }
+        public decimal PayCommissionRate7 { get; set; }
+        public decimal PayCommissionRate8 { get; set; }
+        public decimal PayCommissionRate9 { get; set; }
     }
 }

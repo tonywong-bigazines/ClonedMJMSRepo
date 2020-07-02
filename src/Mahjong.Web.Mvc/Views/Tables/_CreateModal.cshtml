@@ -1,0 +1,115 @@
+﻿@using Abp.Authorization.Users
+@using Mahjong.Web.Models.Common.Modals
+@using Mahjong.Web.Models.Tables
+@model TableListViewModel
+@{
+    Layout = null;
+}
+<div class="modal fade" id="TableCreateModal" tabindex="-1" role="dialog" aria-labelledby="TableCreateModalLabel" data-backdrop="static">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            @await Html.PartialAsync("~/Views/Shared/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(L("CreateNewTable")))
+            <form name="userCreateForm" role="form" class="form-horizontal">
+                <div class="modal-body">
+                    <div class="form-group row required">
+                        <label class="col-md-3 col-form-label" for="name">@L("Name")</label>
+                        <div class="col-md-9">
+                            <input id="name" type="text" class="form-control" name="Name"  required maxlength="100">
+                        </div>
+                    </div>
+                    <div class="form-group row required">
+                        <label class="col-md-3 col-form-label" for="name">@L("Description")</label>
+                        <div class="col-md-9">
+                            <input id="name" type="text" class="form-control" name="Description" >
+                        </div>
+                    </div>
+                    <div class="form-group row required">
+                        <label class="col-md-3 col-form-label" for="name">@L("Status")</label>
+                        <div class="col-md-9">
+                            <input id="name" type="text" class="form-control" name="Status"  required>
+                        </div>
+                    </div>
+                    <div class="form-group row required">
+                        <label class="col-md-3 col-form-label" for="name">@L("Min Amount")</label>
+                        <div class="col-md-9">
+                            <input id="name" type="text" class="form-control" name="MinAmount"  required>
+                        </div>
+                    </div>
+                    <div class="form-group row required">
+                        <label class="col-md-3 col-form-label" for="name">@L("Max Amount")</label>
+                        <div class="col-md-9">
+                            <input id="name" type="text" class="form-control" name="MaxAmount"  required>
+                        </div>
+                    </div>
+                    <div class="form-group row required">
+                        <label class="col-md-3 col-form-label" for="name">@L("Commission Rate")</label>
+                        <div class="col-md-9">
+                            <input id="name" type="text" class="form-control" name="CommissionRate"  required>
+                        </div>
+                    </div>
+                    <div class="form-group row required">
+                        <label class="col-md-3 col-form-label" for="name">@L("Round")</label>
+                        <div class="col-md-9">
+                            <input id="name" type="text" class="form-control" name="Round" required>
+                        </div>
+                    </div>
+                    <div class="form-group row required">
+                        <label class="col-md-3 col-form-label" for="name">@L("PayCommissionRate1")</label>
+                        <div class="col-md-9">
+                            <input id="name" type="text" class="form-control" name="PayCommissionRate1"  required>
+                        </div>
+                    </div>
+                    <div class="form-group row required">
+                        <label class="col-md-3 col-form-label" for="name">@L("PayCommissionRate2")</label>
+                        <div class="col-md-9">
+                            <input id="name" type="text" class="form-control" name="PayCommissionRate2" required>
+                        </div>
+                    </div>
+                    <div class="form-group row required">
+                        <label class="col-md-3 col-form-label" for="name">@L("PayCommissionRate3")</label>
+                        <div class="col-md-9">
+                            <input id="name" type="text" class="form-control" name="PayCommissionRate3" required>
+                        </div>
+                    </div>
+                    <div class="form-group row required">
+                        <label class="col-md-3 col-form-label" for="name">@L("PayCommissionRate4")</label>
+                        <div class="col-md-9">
+                            <input id="name" type="text" class="form-control" name="PayCommissionRate4" required>
+                        </div>
+                    </div>
+                    <div class="form-group row required">
+                        <label class="col-md-3 col-form-label" for="name">@L("PayCommissionRate5")</label>
+                        <div class="col-md-9">
+                            <input id="name" type="text" class="form-control" name="PayCommissionRate5" required>
+                        </div>
+                    </div>
+                    <div class="form-group row required">
+                        <label class="col-md-3 col-form-label" for="name">@L("PayCommissionRate6")</label>
+                        <div class="col-md-9">
+                            <input id="name" type="text" class="form-control" name="PayCommissionRate6" required>
+                        </div>
+                    </div>
+                    <div class="form-group row required">
+                        <label class="col-md-3 col-form-label" for="name">@L("PayCommissionRate7")</label>
+                        <div class="col-md-9">
+                            <input id="name" type="text" class="form-control" name="PayCommissionRate7" required>
+                        </div>
+                    </div>
+                    <div class="form-group row required">
+                        <label class="col-md-3 col-form-label" for="name">@L("PayCommissionRate8")</label>
+                        <div class="col-md-9">
+                            <input id="name" type="text" class="form-control" name="PayCommissionRate8"  required>
+                        </div>
+                    </div>
+                    <div class="form-group row required">
+                        <label class="col-md-3 col-form-label" for="name">@L("PayCommissionRate9")</label>
+                        <div class="col-md-9">
+                            <input id="name" type="text" class="form-control" name="PayCommissionRate9" required>
+                        </div>
+                    </div>
+                </div>
+                @await Html.PartialAsync("~/Views/Shared/Modals/_ModalFooterWithSaveAndCancel.cshtml")
+            </form>
+        </div>
+    </div>
+</div>
